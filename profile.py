@@ -18,16 +18,24 @@ def hash_username(data):
     
     return hash_value
 
+def generate_color(hash_value, min_range=25):
+    random.seed(hash_value)
+    r = random.randint(130, 240)
+    g = random.randint(130, 240)
+    b = random.randint(130, 240)
+    
+    if max(r, g, b) - min(r, g, b) <= min_range:
+        return generate_color(hash_value+1, min_range)
+
+    pastel = (r, g, b)
+    return pastel
+
 def generate_profile(username):
     hash_value = hash_username(username)
     hashed_bits = bits(hash_value)
     
     # Generate pastel color
-    random.seed(hash_value)
-    r = random.randint(160, 240)
-    g = random.randint(160, 240)
-    b = random.randint(160, 240)
-    pastel = (r, g, b)
+    pastel = generate_color(hash_value)
 
     im = Image.new("RGB", (7, 7), (255, 255, 255))
 
